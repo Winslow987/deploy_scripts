@@ -7,22 +7,36 @@ pipeline {
     stage("build") {
     
       steps {
-        echo 'building app'
+        echo 'Starting building the App'
       }
     }
     
     stage("test") {
     
       steps {
-        echo 'test app'
+        input('Continue ?')
       }
     }
     
     stage("deploy") {
-    
-      steps {
-        echo 'deploy app'
-      }
+      parallel {
+        stage('Deploy start ') {
+          steps {
+            echo "Start the deploy..."
+          }
+        }
+        
+     stage('Deploying now') {
+       agent {
+         docker {
+           reuseNode true
+           image 'nginx'
+         }
+       }
+       
+        steps {
+          echo 'Created'
+        }
     }
   }
 }
